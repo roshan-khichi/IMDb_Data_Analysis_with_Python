@@ -35,11 +35,6 @@ Python 3
 
 ## 📊 Example Visualizations
 
-  - Top Genres by Average Rating
-  - Number of Movies Released per Year
-  - Most Popular Actors (by Average Rating)
-  - Correlation Heatmap of Runtime, Ratings, Votes
-
 <img width="600" height="400" alt="Figure_1" src="https://github.com/user-attachments/assets/7b691fae-bd67-4117-bbc0-3a214b011a4a" />
 
 <img width="600" height="400" alt="Figure_2" src="https://github.com/user-attachments/assets/afe8c236-ec3e-4936-b816-9f164498baf4" />
@@ -79,14 +74,9 @@ Open **movie_data_analysis.ipynb** in Jupyter Notebook / VSCode / Colab and run 
 
 ## 🎯 Future Improvements
 
-- Add live IMDb scraping (with Selenium for JavaScript pages)
 - Build a Streamlit Dashboard for interactive exploration
 - Perform Sentiment Analysis on IMDb reviews
 - Add a Recommendation System based on genres & actors
-
-## 📌 Demo Output (Sample Graphs)
-
-(Insert a couple of charts as images here, e.g. visuals/top_genres.png, visuals/trends.png)
 
 ## 📝 License
 
