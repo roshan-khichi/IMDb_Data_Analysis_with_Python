@@ -4,10 +4,10 @@
 This project demonstrates web scraping + data analysis + visualization using Python.
 I scraped IMDb Movie/TV Show data (titles, ratings, genres, actors, runtime, etc.), cleaned it with Pandas, and explored interesting insights such as:
 
-- Top-rated movies by genre
-- Most successful actors and directors
-- Movie release trends over the years
-- Runtime and rating correlations
+- 📊 Top-rated movies by genre  
+- 👨‍🎤 Most successful actors and directors  
+- 📅 Movie release trends over the years  
+- 🎞️ Runtime and rating correlations  
 
 The project also includes interactive visualizations and can be extended into a Movie Recommendation System or Review Sentiment Analyzer.
 
@@ -18,29 +18,27 @@ The project also includes interactive visualizations and can be extended into a 
 ✅ Exploratory Data Analysis (EDA)
 ✅ Visualizations with Matplotlib & Seaborn
 ✅ Insights like:
-
   - Top 10 movies per genre
   - Highest-rated actors/directors
   - Trends in movie releases
 
+---
+
 ## 🛠️ Tech Stack
 Python 3
 
-Libraries:
-
-- pandas → Data analysis
-- requests / BeautifulSoup → Web scraping
-- matplotlib / seaborn → Visualization
+### Libraries:
+- `pandas` → Data analysis  
+- `requests` / `BeautifulSoup` → Web scraping (static pages)  
+- `selenium` → Web scraping (JavaScript-rendered pages, auto browser handling)  
+- `matplotlib` / `seaborn` → Visualization
 
 ## 📊 Example Visualizations
 
-Top Genres by Average Rating
-
-Number of Movies Released per Year
-
-Most Popular Actors (by Average Rating)
-
-Correlation Heatmap of Runtime, Ratings, Votes
+  - Top Genres by Average Rating
+  - Number of Movies Released per Year
+  - Most Popular Actors (by Average Rating)
+  - Correlation Heatmap of Runtime, Ratings, Votes
 
 (Add screenshots/plots here once you generate them)
 
@@ -69,9 +67,10 @@ pip install -r requirements.txt
 ```
 
 ### 3️⃣ Run the notebook
-```bash
-Open movie_data_analysis.ipynb in Jupyter Notebook / VSCode / Colab and run all cells.
-```
+Open **movie_data_analysis.ipynb** in Jupyter Notebook / VSCode / Colab and run all cells.
+
+4️⃣ For Selenium scraping
+  Download [ChromeDriver]('https://chromedriver.chromium.org/downloads') matching your Chrome version, and update the path in **selenium_scraper.py**
 
 ## 🎯 Future Improvements
 
