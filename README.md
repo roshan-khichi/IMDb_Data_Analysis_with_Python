@@ -40,7 +40,12 @@ Python 3
   - Most Popular Actors (by Average Rating)
   - Correlation Heatmap of Runtime, Ratings, Votes
 
-(Add screenshots/plots here once you generate them)
+<img width="600" height="400" alt="Figure_1" src="https://github.com/user-attachments/assets/7b691fae-bd67-4117-bbc0-3a214b011a4a" />
+
+<img width="600" height="400" alt="Figure_2" src="https://github.com/user-attachments/assets/afe8c236-ec3e-4936-b816-9f164498baf4" />
+
+<img width="600" height="400" alt="Figure_3" src="https://github.com/user-attachments/assets/f5ec6793-091c-4bf2-8950-cc140c3bab2c" />
+
 
 ```bash
 
