@@ -1,61 +1,82 @@
-import gettext
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
-import time
 import pandas as pd
-import random
+import re
+import matplotlib.pyplot as plt
 
-# base url
-url = "https://www.imdb.com/chart/top/"
+# Read the CSV with columns: movie_title, rating, rating count, year, time
+df = pd.read_csv("imdb_top_250_movies.csv")
 
-# Launch Chrome
-proxies = [
-"222.252.194.29:8080",
-"35.193.78.97:8080",
-"200.174.198.158:8888",
-"57.129.81.201:999",
-"5.78.130.46:12016"
-]
+# Convert types
+df["year"] = pd.to_numeric(df["year"], errors="coerce")
+df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
 
-# Randomly select a proxy
-proxy = random.choice(proxies)
-chrome_options = Options()
+# rating count like "3.1M", "948K" → integer
+def parse_count(x):
+    if pd.isna(x):
+        return pd.NA
+    t = str(x).strip().upper().replace(",", "")
+    m = re.match(r"([0-9]*\.?[0-9]+)\s*([KMB]?)", t)
+    if not m:
+        return pd.NA
+    num, suf = float(m.group(1)), m.group(2)
+    mult = {"": 1, "K": 1_000, "M": 1_000_000, "B": 1_000_000_000}[suf]
+    return int(num * mult)
 
-chrome_options.add_argument(f'--proxy-server={proxy}')
+# time like "2h 22m" → total minutes
+def parse_time(x):
+    if pd.isna(x):
+        return pd.NA
+    t = str(x).lower()
+    h = re.search(r"(\d+)h", t)
+    m = re.search(r"(\d+)m", t)
+    return (int(h.group(1)) if h else 0) * 60 + (int(m.group(1)) if m else 0)
 
-driver = webdriver.Chrome(options=chrome_options)
+df["rating count"] = df["rating count"].apply(parse_count)
+df["runtime_min"] = df["time"].apply(parse_time)
 
-driver.get(url)
-# wait for page to load (important for dynamic sites)
-time.sleep(3)
+print("✅ Dataset Loaded:", df.shape)
+print(df.head())
 
-# Get full page source
-html = driver.page_source
-soup = BeautifulSoup(html, "html.parser")
+# Quick plot: Rating vs Runtime (minutes)
+plot_df = df.dropna(subset=["rating", "runtime_min"]) 
+if not plot_df.empty:
+    plt.figure(figsize=(6, 4))
+    scatter = plt.scatter(
+        plot_df["runtime_min"],
+        plot_df["rating"],
+        s=12,
+        alpha=0.7,
+        c=plot_df["rating"],          # color by rating
+        cmap="viridis"                # colormap
+    )
+    plt.colorbar(scatter, label="IMDb Rating")  # add color scale
+    plt.xlabel("Runtime (minutes)")
+    plt.ylabel("IMDb Rating")
+    plt.title("Rating vs Runtime")
+    plt.grid(True, alpha=0.2)
+    plt.tight_layout()
+    plt.show()
 
-# Example: extract movie titles
-movies = soup.select("div.ipc-metadata-list-summary-item__c")  # CSS selector for movie headings
+# Histograms: Ratings and Runtime
+if df["rating"].notna().any():
+    plt.figure(figsize=(6, 4))
+    df["rating"].dropna().plot(
+        kind="hist", bins=20, alpha=0.85, color="purple", edgecolor="black"
+    )
+    plt.xlabel("IMDb Rating")
+    plt.ylabel("Count")
+    plt.title("Distribution of Ratings")
+    plt.grid(True, alpha=0.2)
+    plt.tight_layout()
+    plt.show()
 
-movie_list=[]
-for movie in movies:  
-    movie_title = movie.h3.getText().split(". ",1)[1];
-    ratings= movie.select_one("span.ipc-rating-star--rating").getText();
-    ratings_count = movie.select_one("span.ipc-rating-star--voteCount").getText().split("(")[1].split(")")[0];
-    year = movie.select("span.cli-title-metadata-item");
-    data = {
-            # "place": place,
-            "movie_title": movie_title,
-            "rating": ratings,
-            "rating count": ratings_count,
-            "year": year[0].getText(),
-            "time": year[1].getText()
-            }
-    movie_list.append(data)
-
-df = pd.DataFrame(movie_list)
-df.to_csv('imdb_top_250_movies.csv',index=False)
-
-print("IMDb page saved.")
-
-driver.quit()
+if df["runtime_min"].notna().any():
+    plt.figure(figsize=(6, 4))
+    df["runtime_min"].dropna().plot(
+        kind="hist", bins=20, alpha=0.85, color="orange", edgecolor="black"
+    )
+    plt.xlabel("Runtime (minutes)")
+    plt.ylabel("Count")
+    plt.title("Distribution of Runtime")
+    plt.grid(True, alpha=0.2)
+    plt.tight_layout()
+    plt.show()
