@@ -40,7 +40,15 @@ print(df.head())
 plot_df = df.dropna(subset=["rating", "runtime_min"]) 
 if not plot_df.empty:
     plt.figure(figsize=(6, 4))
-    plt.scatter(plot_df["runtime_min"], plot_df["rating"], s=12, alpha=0.6)
+    scatter = plt.scatter(
+        plot_df["runtime_min"],
+        plot_df["rating"],
+        s=12,
+        alpha=0.7,
+        c=plot_df["rating"],          # color by rating
+        cmap="viridis"                # colormap
+    )
+    plt.colorbar(scatter, label="IMDb Rating")  # add color scale
     plt.xlabel("Runtime (minutes)")
     plt.ylabel("IMDb Rating")
     plt.title("Rating vs Runtime")
@@ -51,7 +59,9 @@ if not plot_df.empty:
 # Histograms: Ratings and Runtime
 if df["rating"].notna().any():
     plt.figure(figsize=(6, 4))
-    df["rating"].dropna().plot(kind="hist", bins=20, alpha=0.8)
+    df["rating"].dropna().plot(
+        kind="hist", bins=20, alpha=0.85, color="purple", edgecolor="black"
+    )
     plt.xlabel("IMDb Rating")
     plt.ylabel("Count")
     plt.title("Distribution of Ratings")
@@ -61,7 +71,9 @@ if df["rating"].notna().any():
 
 if df["runtime_min"].notna().any():
     plt.figure(figsize=(6, 4))
-    df["runtime_min"].dropna().plot(kind="hist", bins=20, alpha=0.8)
+    df["runtime_min"].dropna().plot(
+        kind="hist", bins=20, alpha=0.85, color="orange", edgecolor="black"
+    )
     plt.xlabel("Runtime (minutes)")
     plt.ylabel("Count")
     plt.title("Distribution of Runtime")
